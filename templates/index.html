@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Travel Planner : Muslim Friendly</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sand: '#f5f0e8',
+                        clay: '#c9a87c',
+                        moss: '#4a6741',
+                        dusk: '#2c3e35',
+                        mist: '#e8ede6',
+                    },
+                    fontFamily: {
+                        display: ['Cormorant Garamond', 'serif'],
+                        body: ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #f5f0e8;
+        }
+
+        .pattern-bg {
+            background-image: radial-gradient(circle at 1px 1px, #c9a87c22 1px, transparent 0);
+            background-size: 28px 28px;
+        }
+
+        .geo-border {
+            border-image: repeating-linear-gradient(
+                45deg,
+                #c9a87c,
+                #c9a87c 4px,
+                transparent 4px,
+                transparent 12px
+            ) 1;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up { animation: fadeUp 0.7s ease both; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.35s; }
+        .delay-4 { animation-delay: 0.5s; }
+
+        input:focus {
+            outline: none;
+            border-color: #4a6741;
+            box-shadow: 0 0 0 3px #4a674122;
+        }
+
+        .crescent {
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen pattern-bg">
+
+    <!-- Top accent bar -->
+    <div class="h-1 w-full bg-gradient-to-r from-clay via-moss to-clay"></div>
+
+    <div class="max-w-5xl mx-auto px-6 py-16 lg:py-24">
+
+        <!-- Header -->
+        <header class="text-center mb-16 fade-up">
+            <div class="inline-flex items-center gap-2 bg-moss/10 text-moss text-xs font-body font-medium tracking-widest uppercase px-4 py-2 rounded-full mb-6 border border-moss/20">
+                <span class="crescent">☽</span>
+                Muslim Friendly Travel
+            </div>
+
+            <h1 class="font-display text-5xl lg:text-7xl font-300 text-dusk leading-tight mb-4">
+                Plan Your Journey,<br>
+                <span class="text-moss italic">Peacefully.</span>
+            </h1>
+
+            <p class="font-body text-dusk/60 text-lg max-w-md mx-auto font-light leading-relaxed">
+                AI-curated itineraries tailored for the Muslim traveler — halal dining and cultural experiences, all in one place.
+            </p>
+        </header>
+
+        <!-- Features strip -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-16 fade-up delay-1">
+            {%- set features = [
+                ('🕌', 'Itinerary Planning'),
+                ('🍽️', 'Halal Restaurants'),
+                ('🗺️', 'Destination Guides'),
+                ('✈️', 'Travel Tips'),
+            ] %}
+            {% for icon, label in features %}
+            <div class="bg-white/60 backdrop-blur rounded-xl px-4 py-3 flex items-center gap-3 border border-clay/20">
+                <span class="text-xl">{{ icon }}</span>
+                <span class="font-body text-sm text-dusk/70 font-medium">{{ label }}</span>
+            </div>
+            {% endfor %}
+
+            <!-- Static fallback if not rendered as Jinja -->
+            <div class="bg-white/60 backdrop-blur rounded-xl px-4 py-3 flex items-center gap-3 border border-clay/20 jinja-hide">
+                <span class="text-xl">🕌</span>
+                <span class="font-body text-sm text-dusk/70 font-medium">Itinerary Planning</span>
+            </div>
+            <div class="bg-white/60 backdrop-blur rounded-xl px-4 py-3 flex items-center gap-3 border border-clay/20 jinja-hide">
+                <span class="text-xl">🍽️</span>
+                <span class="font-body text-sm text-dusk/70 font-medium">Halal Restaurants</span>
+            </div>
+            <div class="bg-white/60 backdrop-blur rounded-xl px-4 py-3 flex items-center gap-3 border border-clay/20 jinja-hide">
+                <span class="text-xl">🗺️</span>
+                <span class="font-body text-sm text-dusk/70 font-medium">Destination Guides</span>
+            </div>
+            <div class="bg-white/60 backdrop-blur rounded-xl px-4 py-3 flex items-center gap-3 border border-clay/20 jinja-hide">
+                <span class="text-xl">✈️</span>
+                <span class="font-body text-sm text-dusk/70 font-medium">Travel Tips</span>
+            </div>
+        </div>
+
+        <!-- Form card -->
+        <div class="bg-white/70 backdrop-blur-sm rounded-3xl border border-clay/25 shadow-xl shadow-dusk/5 overflow-hidden fade-up delay-2">
+
+            <!-- Card header -->
+            <div class="bg-dusk px-8 py-6 flex items-center justify-between">
+                <div>
+                    <h2 class="font-display text-2xl text-sand font-light">Build My Itinerary</h2>
+                    <p class="font-body text-sand/50 text-sm mt-0.5">Tell us about your trip</p>
+                </div>
+                <div class="text-4xl opacity-30">🌙</div>
+            </div>
+
+            <!-- Form body -->
+            <form action="/itinerary" method="post" class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Destination -->
+                <div class="md:col-span-2 fade-up delay-2">
+                    <label for="destination" class="block font-body text-xs font-medium tracking-widest uppercase text-dusk/50 mb-2">
+                        Destination
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg">📍</span>
+                        <input
+                            type="text"
+                            id="destination"
+                            name="destination"
+                            placeholder="Where are you headed? e.g. Istanbul, Tokyo, Seoul..."
+                            class="w-full pl-11 pr-4 py-3.5 bg-sand/60 border border-clay/30 rounded-xl font-body text-dusk placeholder:text-dusk/30 transition-all duration-200"
+                        >
+                    </div>
+                </div>
+
+                <!-- Days of Stay -->
+                <div class="fade-up delay-3">
+                    <label for="days" class="block font-body text-xs font-medium tracking-widest uppercase text-dusk/50 mb-2">
+                        Days of Stay
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg">🗓️</span>
+                        <input
+                            type="number"
+                            id="days"
+                            name="days"
+                            min="1"
+                            placeholder="e.g. 5"
+                            class="w-full pl-11 pr-4 py-3.5 bg-sand/60 border border-clay/30 rounded-xl font-body text-dusk placeholder:text-dusk/30 transition-all duration-200"
+                        >
+                    </div>
+                </div>
+
+                <!-- Number of Travelers -->
+                <div class="fade-up delay-3">
+                    <label for="pax" class="block font-body text-xs font-medium tracking-widest uppercase text-dusk/50 mb-2">
+                        Number of Travelers
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg">👥</span>
+                        <input
+                            type="text"
+                            id="pax"
+                            name="person"
+                            placeholder="e.g. 2 adults, 1 child"
+                            class="w-full pl-11 pr-4 py-3.5 bg-sand/60 border border-clay/30 rounded-xl font-body text-dusk placeholder:text-dusk/30 transition-all duration-200"
+                        >
+                    </div>
+                </div>
+
+                <!-- Preferences -->
+                <div class="md:col-span-2 fade-up delay-4">
+                    <label for="interests" class="block font-body text-xs font-medium tracking-widest uppercase text-dusk/50 mb-2">
+                        Preferences
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-lg">✨</span>
+                        <input
+                            type="text"
+                            id="interests"
+                            name="interests"
+                            placeholder="e.g. cultural sites, nature, halal street food, shopping..."
+                            class="w-full pl-11 pr-4 py-3.5 bg-sand/60 border border-clay/30 rounded-xl font-body text-dusk placeholder:text-dusk/30 transition-all duration-200"
+                        >
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="md:col-span-2 pt-2 fade-up delay-4">
+                    <button
+                        type="submit"
+                        class="w-full bg-moss hover:bg-dusk text-sand font-body font-medium tracking-wide py-4 px-8 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 group shadow-lg shadow-moss/20 hover:shadow-dusk/20"
+                    >
+                        <span>Plan My Halal Journey</span>
+                        <span class="group-hover:translate-x-1 transition-transform duration-200">→</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Footer note -->
+        <p class="text-center font-body text-dusk/35 text-sm mt-10 fade-up delay-4">
+            ☽ &nbsp;Crafted with care for the Muslim traveler worldwide
+        </p>
+
+    </div>
+
+    <script>
+        // Remove static fallback feature pills (only shown when Jinja isn't rendering)
+        // In real Jinja context the loop renders them; remove the static duplicates
+        document.querySelectorAll('.jinja-hide').forEach(el => el.remove());
+    </script>
+
+</body>
+
+</html>

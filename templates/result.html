@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Itinerary – AI Travel Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sand:  '#f5f0e8',
+                        clay:  '#c9a87c',
+                        moss:  '#4a6741',
+                        dusk:  '#2c3e35',
+                        mist:  '#e8ede6',
+                    },
+                    fontFamily: {
+                        display: ['Cormorant Garamond', 'serif'],
+                        body:    ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'DM Sans', sans-serif; background-color: #f5f0e8; }
+
+        .pattern-bg {
+            background-image: radial-gradient(circle at 1px 1px, #c9a87c22 1px, transparent 0);
+            background-size: 28px 28px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.6s ease both; }
+
+        .day-card:nth-child(1) { animation-delay: 0.1s; }
+        .day-card:nth-child(2) { animation-delay: 0.2s; }
+        .day-card:nth-child(3) { animation-delay: 0.3s; }
+        .day-card:nth-child(4) { animation-delay: 0.4s; }
+        .day-card:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+</head>
+
+<body class="min-h-screen pattern-bg">
+
+    <!-- Top accent bar -->
+    <div class="h-1 w-full bg-gradient-to-r from-clay via-moss to-clay"></div>
+
+    <div class="max-w-4xl mx-auto px-6 py-14">
+
+        <!-- Back link -->
+        <a href="/itinerary/" class="inline-flex items-center gap-2 text-dusk/50 hover:text-moss text-sm font-body transition-colors duration-200 mb-10">
+            ← Plan another trip
+        </a>
+
+        <!-- Trip header -->
+        <div class="mb-12 fade-up">
+            <div class="inline-flex items-center gap-2 bg-moss/10 text-moss text-xs font-body font-medium tracking-widest uppercase px-4 py-2 rounded-full mb-5 border border-moss/20">
+                ☽ Your Halal Itinerary
+            </div>
+
+            <h1 class="font-display text-5xl lg:text-6xl font-light text-dusk mb-3">
+                {{ itinerary.destination }}
+            </h1>
+
+            <!-- Trip meta chips -->
+            <div class="flex flex-wrap gap-3 mt-5">
+                <span class="flex items-center gap-2 bg-white/70 border border-clay/25 text-dusk/70 text-sm font-body px-4 py-2 rounded-full">
+                    🗓️ {{ itinerary.days_of_stay }} days
+                </span>
+                <span class="flex items-center gap-2 bg-white/70 border border-clay/25 text-dusk/70 text-sm font-body px-4 py-2 rounded-full">
+                    👥 {{ itinerary.total_person }}
+                </span>
+                <span class="flex items-center gap-2 bg-white/70 border border-clay/25 text-dusk/70 text-sm font-body px-4 py-2 rounded-full">
+                    ✨ {{ itinerary.preferences }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Day cards -->
+        <div class="space-y-8">
+            {% for day in itinerary.itinerary %}
+            <div class="day-card fade-up bg-white/70 backdrop-blur-sm rounded-3xl border border-clay/20 shadow-lg shadow-dusk/5 overflow-hidden">
+
+                <!-- Day header -->
+                <div class="bg-dusk px-7 py-5 flex items-center justify-between">
+                    <div>
+                        <p class="font-body text-xs tracking-widest uppercase text-sand/40 mb-1">Day</p>
+                        <h2 class="font-display text-3xl text-sand font-light">{{ day.day_number }}</h2>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-body text-xs tracking-widest uppercase text-sand/40 mb-1">Est. Budget</p>
+                        <p class="font-display text-2xl text-clay">${{ day.estimated_budget }}</p>
+                    </div>
+                </div>
+
+                <div class="p-7 space-y-7">
+
+                    <!-- Activities -->
+                    <div>
+                        <h3 class="font-body text-xs font-medium tracking-widest uppercase text-dusk/40 mb-4">Activities</h3>
+                        <div class="space-y-3">
+                            {% for activity in day.activities %}
+                            <div class="flex gap-4 bg-mist/50 rounded-2xl p-4 border border-moss/10">
+                                <div class="w-8 h-8 rounded-full bg-moss/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <span class="text-moss text-sm font-body font-medium">{{ loop.index }}</span>
+                                </div>
+                                <div>
+                                    <p class="font-body font-medium text-dusk text-sm mb-1">{{ activity.name }}</p>
+                                    <p class="font-body text-dusk/55 text-sm leading-relaxed">{{ activity.description }}</p>
+                                    <p class="font-body text-clay text-xs mt-2 flex items-center gap-1">
+                                        📍 {{ activity.location }}
+                                    </p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Attractions & Dining side by side -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        <!-- Attractions -->
+                        <div class="bg-sand/60 rounded-2xl p-5 border border-clay/15">
+                            <h3 class="font-body text-xs font-medium tracking-widest uppercase text-dusk/40 mb-3">Attractions</h3>
+                            <ul class="space-y-2">
+                                {% for attraction in day.attractions %}
+                                <li class="flex items-start gap-2 font-body text-sm text-dusk/70">
+                                    <span class="text-clay mt-0.5">▸</span>
+                                    {{ attraction }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Dining -->
+                        <div class="bg-moss/8 rounded-2xl p-5 border border-moss/15" style="background-color: #4a674108;">
+                            <h3 class="font-body text-xs font-medium tracking-widest uppercase text-dusk/40 mb-3">🍽️ Halal Dining</h3>
+                            <ul class="space-y-2">
+                                {% for place in day.dining_options %}
+                                <li class="flex items-start gap-2 font-body text-sm text-dusk/70">
+                                    <span class="text-moss mt-0.5">▸</span>
+                                    {{ place }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Total budget summary -->
+        <div class="mt-10 bg-dusk rounded-2xl px-7 py-5 flex items-center justify-between fade-up">
+            <div>
+                <p class="font-body text-xs tracking-widest uppercase text-sand/40 mb-1">Total Estimated Budget</p>
+                <p class="font-display text-4xl text-sand font-light">
+                    ${{ itinerary.itinerary | sum(attribute='estimated_budget') }}
+                </p>
+            </div>
+            <a href="/itinerary/"
+               class="bg-clay hover:bg-sand text-dusk font-body text-sm font-medium px-6 py-3 rounded-xl transition-all duration-200">
+                Plan Another Trip →
+            </a>
+        </div>
+
+        <p class="text-center font-body text-dusk/30 text-xs mt-8">
+            ☽ &nbsp;Crafted with care for the Muslim traveler worldwide
+        </p>
+
+    </div>
+
+</body>
+</html>
